@@ -18,7 +18,7 @@ export function Sidebar() {
   const logout = useLogout();
 
   return (
-    <aside className="fixed left-0 top-0 h-full w-64 bg-white border-r border-slate-200 z-40">
+    <aside className="fixed left-0 top-0 h-full w-64 bg-white border-r border-slate-200 z-40 lg:block">
       <div className="p-6 border-b border-slate-200">
         <div className="flex items-center space-x-3">
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
