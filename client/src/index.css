@@ -2,6 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Responsive utilities */
+@layer components {
+  .responsive-grid {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4;
+  }
+  
+  .responsive-table {
+    @apply block overflow-x-auto sm:table;
+  }
+  
+  .responsive-card {
+    @apply bg-white rounded-lg border border-slate-200 p-4 shadow-sm hover:shadow-md transition-shadow;
+  }
+  
+  .mobile-hidden {
+    @apply hidden sm:table-cell;
+  }
+  
+  .mobile-only {
+    @apply block sm:hidden;
+  }
+}
+
 :root {
       --background: 0 0% 100%;
 --foreground: 20 14.3% 4.1%;
