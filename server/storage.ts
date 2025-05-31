@@ -50,8 +50,8 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getUserByGoogleId(googleId: string): Promise<User | undefined> {
-    const [user] = await db.select().from(users).where(eq(users.googleId, googleId));
-    return user || undefined;
+    // Mock implementation for demo
+    return undefined;
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
