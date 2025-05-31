@@ -100,7 +100,10 @@ export function CampaignHistory({ campaigns, onViewAll }: CampaignHistoryProps) 
                 
                 <div className="mt-3 pt-3 border-t border-slate-100">
                   <span className="text-xs text-slate-500">
-                    {formatDistanceToNow(new Date(campaign.createdAt), { addSuffix: true })}
+                    {campaign.createdAt 
+                      ? formatDistanceToNow(new Date(campaign.createdAt), { addSuffix: true })
+                      : "Recently created"
+                    }
                   </span>
                 </div>
               </div>
