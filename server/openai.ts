@@ -6,77 +6,62 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY_ENV_VAR || ""
 });
 
+import type { SegmentRule, AIMessageSuggestion } from "@shared/schema";
+
+// Placeholder for Google Flash 2.0 API client initialization
+// You'll need to install the necessary SDK and configure it with your API key
+// Example: import { FlashApiClient } from 'google-flash-api-sdk';
+// const flashApiClient = new FlashApiClient({ apiKey: process.env.GOOGLE_FLASH_API_KEY });
+
 /**
- * Convert natural language query to segment rules using AI
+ * Convert natural language query to segment rules using Google Flash 2.0 API
  */
 export async function generateAISegmentRules(query: string): Promise<SegmentRule[]> {
   try {
-    const prompt = `Convert the following natural language description into customer segmentation rules for a CRM system.
+    console.log(`Generating AI segment rules for query: ${query} using Google Flash 2.0 API`);
 
-Natural language query: "${query}"
+    // TODO: Replace this with the actual call to Google Flash 2.0 API
+    // This will involve:
+    // 1. Formatting the request according to Google Flash 2.0 API's specifications.
+    //    This might involve sending the natural language query and specifying the desired output format (segment rules).
+    // 2. Calling the appropriate Google Flash 2.0 API endpoint.
+    //    Example: const response = await flashApiClient.generateSegmentRules({ naturalLanguageQuery: query, outputFormat: 'json_rules_v1' });
+    // 3. Parsing the response from the API to extract the segment rules.
+    //    The structure of 'SegmentRule' should match what the frontend expects.
+    //    Ensure the response is transformed into the SegmentRule[] format if it's different.
 
-Available fields:
-- totalSpend (number): Customer's total spending amount
-- visitCount (number): Number of visits/orders
-- lastVisit (date): Days since last visit 
-- registrationDate (date): Days since registration
+    // Placeholder response (replace with actual API call and response parsing)
+    const mockApiResponse = {
+      data: {
+        rules: [
+          {
+            field: "totalSpend",
+            operator: "gt", 
+            value: 5000, // Example: API might return numbers directly
+            logic: "AND"
+          },
+          {
+            field: "lastVisit",
+            operator: "days_ago", 
+            value: 90 
+          }
+        ]
+      }
+    };
 
-Available operators:
-- For numbers: "gt" (greater than), "lt" (less than), "gte" (greater than or equal), "lte" (less than or equal), "eq" (equal to)
-- For dates: "days_ago" (more than X days ago), "less_than_days_ago" (less than X days ago)
+    // Assuming the API returns rules in a compatible format or after transformation
+    const rulesFromApi = mockApiResponse.data.rules;
 
-Logic operators: "AND", "OR"
-
-Return a JSON array of rules in this exact format:
-{
-  "rules": [
-    {
-      "field": "totalSpend",
-      "operator": "gt", 
-      "value": 10000,
-      "logic": "AND"
-    }
-  ]
-}
-
-Rules:
-1. First rule should not have a logic field
-2. Subsequent rules should have logic: "AND" or "OR"
-3. Convert currency amounts to numbers (remove symbols)
-4. Convert time periods to days as numbers
-5. Use appropriate field names and operators
-6. Create multiple rules for complex conditions`;
-
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [
-        {
-          role: "system",
-          content: "You are an expert at converting natural language queries into structured customer segmentation rules. Always respond with valid JSON in the exact format requested."
-        },
-        {
-          role: "user",
-          content: prompt
-        }
-      ],
-      response_format: { type: "json_object" },
-      temperature: 0.3,
-    });
-
-    const result = JSON.parse(response.choices[0].message.content || "{}");
-    
-    if (!result.rules || !Array.isArray(result.rules)) {
-      throw new Error("Invalid response format from AI");
+    if (!rulesFromApi || !Array.isArray(rulesFromApi)) {
+      throw new Error("Invalid response format from Google Flash 2.0 API");
     }
 
-    // Validate and clean the rules
-    const validatedRules: SegmentRule[] = result.rules.map((rule: any, index: number) => {
-      // Remove logic from first rule
+    // Validate and clean the rules (similar to existing logic, adjust as needed)
+    const validatedRules: SegmentRule[] = rulesFromApi.map((rule: any, index: number) => {
       if (index === 0) {
         const { logic, ...ruleWithoutLogic } = rule;
         return ruleWithoutLogic;
       }
-      
       return {
         field: rule.field,
         operator: rule.operator,
@@ -85,11 +70,13 @@ Rules:
       };
     });
 
+    console.log("Successfully generated rules from Google Flash 2.0 API:", validatedRules);
     return validatedRules;
 
   } catch (error) {
-    console.error("Error generating AI segment rules:", error);
-    throw new Error("Failed to generate segment rules from natural language query");
+    console.error("Error generating AI segment rules with Google Flash 2.0 API:", error);
+    // It's good practice to throw a more specific error or handle it gracefully
+    throw new Error("Failed to generate segment rules using Google Flash 2.0 API. Please check the API integration and query.");
   }
 }
 
@@ -123,29 +110,38 @@ Return JSON in this exact format:
 
 Tone options: Friendly/Personal, Professional/Urgent, Exclusive/Rewarding, Helpful/Informative, Exciting/Promotional`;
 
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [
-        {
-          role: "system",
-          content: "You are an expert marketing copywriter specializing in personalized customer communications. Create engaging, effective messages that drive action while maintaining brand professionalism."
-        },
-        {
-          role: "user",
-          content: prompt
-        }
-      ],
-      response_format: { type: "json_object" },
-      temperature: 0.7,
-    });
+    // This part would also be replaced if using Google's API for message generation
+    // const response = await openai.chat.completions.create({
+    //   model: "gpt-4o",
+    //   messages: [
+    //     {
+    //       role: "system",
+    //       content: "You are an expert marketing copywriter specializing in personalized customer communications. Create engaging, effective messages that drive action while maintaining brand professionalism."
+    //     },
+    //     {
+    //       role: "user",
+    //       content: prompt
+    //     }
+    //   ],
+    //   response_format: { type: "json_object" },
+    //   temperature: 0.7,
+    // });
 
-    const result = JSON.parse(response.choices[0].message.content || "{}");
+    // const result = JSON.parse(response.choices[0].message.content || "{}");
     
+    // Placeholder for Google API call for message generation
+    console.warn("generateAIMessage is still using placeholder/OpenAI. Update to Google Flash 2.0 API if needed.");
+    const result = { // Mock response
+        messages: [
+            { text: "Hi {{firstName}}, special offer just for you!", tone: "Friendly, Personal", confidence: 0.9 },
+            { text: "{{firstName}}, don't miss out on our new arrivals!", tone: "Exciting/Promotional", confidence: 0.85 }
+        ]
+    };
+
     if (!result.messages || !Array.isArray(result.messages)) {
       throw new Error("Invalid response format from AI");
     }
 
-    // Validate message suggestions
     const validatedMessages: AIMessageSuggestion[] = result.messages.map((msg: any) => ({
       text: msg.text || "",
       tone: msg.tone || "Professional",

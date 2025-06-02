@@ -245,8 +245,8 @@ export default function Analytics() {
                             <div>
                               <p className="font-medium text-slate-800">{campaign.name}</p>
                               <p className="text-sm text-slate-500">
-                                {formatDistanceToNow(new Date(campaign.createdAt), { addSuffix: true })}
-                              </p>
+                                  {campaign.createdAt ? formatDistanceToNow(campaign.createdAt, { addSuffix: true }) : 'N/A'}
+                                </p>
                             </div>
                           </td>
                           <td className="px-6 py-4 text-sm text-slate-600">

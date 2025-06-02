@@ -259,7 +259,7 @@ export default function Campaigns() {
                           size="sm"
                           onClick={() => insertVariable("firstName")}
                         >
-                          {{firstName}}
+                          firstName
                         </Button>
                         <Button
                           type="button"
@@ -267,7 +267,7 @@ export default function Campaigns() {
                           size="sm"
                           onClick={() => insertVariable("discount")}
                         >
-                          {{discount}}
+                          discount
                         </Button>
                         <Button
                           type="button"
@@ -275,7 +275,7 @@ export default function Campaigns() {
                           size="sm"
                           onClick={() => insertVariable("product")}
                         >
-                          {{product}}
+                          product
                         </Button>
                       </div>
                     </div>

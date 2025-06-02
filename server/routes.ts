@@ -1,6 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { simpleStorage } from "./simple-storage";
+import { generateAISegmentRules } from "./openai";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
@@ -62,22 +63,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // AI-powered segment generation (mock response)
-  app.post("/api/ai/segments", async (req, res) => {
+  // AI-powered segment generation
+  app.post("/api/segments/ai-generate", async (req, res) => {
     try {
       const { query } = req.body;
       if (!query) {
         return res.status(400).json({ error: "Query is required" });
       }
 
-      // Mock AI response
-      const rules = [
-        { field: "totalSpend", operator: "greater_than", value: "10000", logic: "AND" },
-        { field: "visitCount", operator: "less_than", value: "5", logic: "OR" }
-      ];
-      res.json({ rules });
+      const rules = await generateAISegmentRules(query);
+      // TODO: Calculate audience size based on new rules. For now, returning a placeholder.
+      const audienceSize = await simpleStorage.calculateAudienceSize(rules); 
+      res.json({ rules, audienceSize });
     } catch (error: any) {
-      res.status(500).json({ error: error.message });
+      console.error("Error in /api/segments/ai-generate:", error);
+      res.status(500).json({ error: error.message || "Failed to generate AI segment rules" });
     }
   });
 

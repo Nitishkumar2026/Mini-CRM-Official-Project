@@ -1,0 +1,20 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "client/package.json",
+      "use": "@vercel/static-build",
+      "config": { "distDir": "dist" } // Assuming vite builds to client/dist
+    },
+    {
+      "src": "server/index.ts", // Or your main server entry point if different after build
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    // Route API calls to the serverless function
+    { "src": "/api/(.*)", "dest": "/server/index.ts" }, // Adjust dest if your build output is different
+    // Route all other calls to the frontend
+    { "src": "/(.*)", "dest": "/client/dist/$1" } // Adjust dest to your client's built index.html or assets
+  ]
+}
