@@ -4,6 +4,13 @@
     {
       "src": "server/index.ts",
       "use": "@vercel/node"
+    },
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist/public"
+      }
     }
   ],
   "routes": [
@@ -20,6 +27,3 @@
     }
   ]
 }
-// Note: If you set 'Root Directory' to 'client' in Vercel UI for the frontend,
-// Vercel might automatically handle the client build without needing its entry in 'builds' here.
-// In that case, this vercel.json could potentially only contain the server build and API routes.
