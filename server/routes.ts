@@ -5,6 +5,11 @@ import { generateAISegmentRules } from "./openai";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
+  // Health check endpoint for Render
+  app.get("/api/health", (req, res) => {
+    res.status(200).json({ status: "ok" });
+  });
+  
   // Customer management endpoints
   app.get("/api/customers", async (req, res) => {
     try {
